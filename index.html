@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wekaes menu</title>
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background-color: #fff;
+      color: #000;
+      user-select: none;
+    }
+
+    /* Top bar - device info */
+    .top-bar {
+      background-color: #fff;
+      color: #000;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 4px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .top-bar .left {
+      font-weight: 600;
+    }
+    .top-bar .right {
+      display: flex;
+      align-items: center;
+    }
+    .top-bar .sim-indicator {
+      background-color: #ffb300;
+      color: #000;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: 6px;
+    }
+
+    /* Header with table info */
+    .header-table {
+      background-color: #fff1f0;
+      color: #6f4e37;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 6px 0;
+      text-align: center;
+      border-bottom: 1px solid #f7d4d0;
+      user-select: text;
+    }
+
+    /* Navbar with brand and search and menu */
+    header.main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid #ddd;
+      font-weight: 700;
+      font-size: 18px;
+      position: sticky;
+      top: 42px; /* height top-bar + header-table */
+      background-color: white;
+      z-index: 15;
+    }
+    header.main-header .brand {
+      flex: 1;
+    }
+    header.main-header .actions {
+      display: flex;
+      gap: 18px;
+      font-weight: normal;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    header.main-header .actions svg {
+      stroke: #000;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* Category nav */
+    nav.categories {
+      display: flex;
+      gap: 20px;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 14px;
+      border-bottom: 1px solid #ddd;
+      user-select: none;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      background-color: #fff;
+      position: sticky;
+      top: 84px; /* top-bar + header-table + main-header */
+      z-index: 14;
+    }
+    nav.categories::-webkit-scrollbar {
+      display: none;
+    }
+    nav.categories a {
+      white-space: nowrap;
+      color: #000;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    nav.categories a:hover,
+    nav.categories a.active {
+      color: #e94e1b;
+    }
+
+    /* Section title */
+    .section-title {
+      font-weight: 700;
+      font-size: 16px;
+      padding: 12px 14px 6px 14px;
+      user-select: none;
+    }
+
+    /* Menu list */
+    ul.menu-list {
+      list-style: none;
+      margin: 0;
+      padding: 0 14px 80px 14px;
+    }
+    ul.menu-list li.menu-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #ececec;
+    }
+    ul.menu-list li.menu-item img {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin-right: 12px;
+      background-color: #f5f5f5;
+    }
+    ul.menu-list li.menu-item .info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      user-select: text;
+    }
+    ul.menu-list li.menu-item .info .name {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    ul.menu-list li.menu-item .info .variant {
+      font-size: 13px;
+      color: #888;
+    }
+    ul.menu-list li.menu-item button {
+      background: none;
+      border: 1.2px solid #e94e1b;
+      color: #e94e1b;
+      padding: 6px 14px;
+      font-weight: 600;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    ul.menu-list li.menu-item button:hover {
+      background-color: #e94e1b;
+      color: white;
+      border-color: #e94e1b;
+    }
+
+    /* Checkout bar */
+    .checkout-bar {
+      position: fixed;
+      bottom: 70px;
+      left: 10px;
+      right: 10px;
+      background-color: #e94e1b;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgb(233 78 27 / 0.6);
+      color: white;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 8px 10px 12px;
+      gap: 10px;
+      user-select: none;
+      max-width: 480px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      z-index: 50;
+    }
+    .checkout-bar .basket {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      background: rgba(255 255 255 / 0.2);
+      border-radius: 8px;
+      padding: 6px 10px;
+    }
+    .checkout-bar .basket .count {
+      background-color: #fff;
+      color: #e94e1b;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      height: 22px;
+      width: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1.5px solid #e94e1b;
+    }
+    .checkout-bar .total-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .checkout-bar .total-price {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      margin-right: 10px;
+    }
+    .checkout-bar .checkout-btn {
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      white-space: nowrap;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: background-color 0.2s ease;
+    }
+    .checkout-bar .checkout-btn:hover {
+      background-color: rgba(255 255 255 / 0.3);
+    }
+
+    /* Bottom navigation placeholder */
+    .bottom-nav-placeholder {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #333;
+      opacity: 0.3;
+      z-index: 40;
+    }
+  </style>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+
+  <div class="header-table" role="banner" aria-label="Meja Outdoor-P1 status">
+    ENJOY YOUR COFFE !
+  </div>
+
+  <header class="main-header" role="navigation" aria-label="Main menu navigation">
+    <div class="brand">WEKAES MENU</div>
+    <!-- Tambahkan di bawah header.main-header -->
+<div id="search-bar" style="padding: 10px 14px; border-bottom: 1px solid #eee; background: #fff;">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Cari menu..."
+    style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 15px;"
+    oninput="filterMenu()"
+    autocomplete="off"
+  />
+</div>
+
+<!-- Sidebar menu (toggle dengan garis tiga) -->
+<div id="sideMenu" style="display:none; position:fixed; top:0; left:0; width:220px; height:100%; background:#fff; box-shadow:2px 0 8px #0002; z-index:1000; padding:24px 16px;">
+  <div style="font-weight:bold; margin-bottom:18px;">Menu Lainnya</div>
+  <ul style="list-style:none; padding:0; margin:0;">
+    <li><a href="#" style="color:#e94e1b; text-decoration:none;">Info</a></li>
+    <li><a href="#" style="color:#e94e1b; text-decoration:none;">Logout</a></li>
+  </ul>
+  <button onclick="toggleSideMenu()" style="margin-top:24px; padding:6px 18px; border-radius:8px; border:none; background:#e94e1b; color:#fff; font-weight:600;">Tutup</button>
+</div>
+<div id="sideMenuOverlay" onclick="toggleSideMenu()" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.2); z-index:999;"></div>
+<button aria-label="Menu" title="Menu" onclick="toggleSideMenu()" type="button" style="background:none; border:none; padding:0;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+    <line x1="3" y1="12" x2="21" y2="12" stroke-linecap="round" stroke-linejoin="round" />
+    <line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round" stroke-linejoin="round" />
+    <line x1="3" y1="18" x2="21" y2="18" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</button>
+<script>
+// Toggle sidebar menu
+function toggleSideMenu() {
+  const menu = document.getElementById('sideMenu');
+  const overlay = document.getElementById('sideMenuOverlay');
+  if (menu.style.display === 'none' || menu.style.display === '') {
+    menu.style.display = 'block';
+    overlay.style.display = 'block';
+  } else {
+    menu.style.display = 'none';
+    overlay.style.display = 'none';
+  }
+}
+
+// Filter menu berdasarkan input pencarian
+function filterMenu() {
+  const input = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('section[id^="section-"]').forEach(section => {
+    section.querySelectorAll('.menu-item').forEach(item => {
+      const name = item.querySelector('.name').textContent.toLowerCase();
+      item.style.display = name.includes(input) ? '' : 'none';
+    });
+  });
+}
+</script>
+  </header>
+
+ <!-- ...existing code... -->
+<nav class="categories" role="navigation" aria-label="Category navigation">
+  <a href="#" class="active" data-section="nyemil" tabindex="0" aria-current="page">SNACK</a>
+  <a href="#" data-section="sambal" tabindex="0">FOOD</a>
+  <a href="#" data-section="minuman" tabindex="0">DRINK</a>
+  
+</nav>
+
+<section id="section-nyemil">
+  <ul class="menu-list">
+    <li class="menu-item">
+      <img src="https://www.rumahmesin.com/wp-content/uploads/2019/02/cara-membuat-saus-kentang-goreng.jpg?auto=format&fit=crop&w=72&q=80" alt="Kentang Goreng"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Kentang Goreng</span>
+        <span class="variant">Rp 10.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://www.thehealthybelly.co/storage/product/media_1619779365_0.jpeg?auto=format&fit=crop&w=72&q=80" alt="Roti Bakar"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Roti Bakar</span>
+        <span class="variant">Rp 12.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://img-global.cpcdn.com/recipes/95ade3e16be0952f/1200x630cq70/photo.jpg?auto=format&fit=crop&w=72&q=80" alt="Mix Platter"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Mix Platter</span>
+        <span class="variant">Rp 18.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://img-global.cpcdn.com/recipes/d8157dab2d988066/1200x630cq70/photo.jpg?auto=format&fit=crop&w=72&q=80" alt="Varian Bakaran"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Bakso bakar</span>
+        <span class="variant">Rp 3.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://cdn.idntimes.com/content-images/community/2020/11/image-cd61286ea9242649c0d797427d3b2ba0.jpg?auto=format&fit=crop&w=72&q=80" alt="Kulit Ayam Crispy"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Sosis bakar</span>
+        <span class="variant">Rp 3.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/a9e124b0-00d6-4460-8620-211986a0e8b3_Go-Biz_20220601_194443.jpeg?auto=format?auto=format&fit=crop&w=72&q=80" alt="Nasi Kulit"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Cikua</span>
+        <span class="variant">Rp 3.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://i.gojekapi.com/darkroom/gofood-indonesia/v2/images/uploads/e195e66c-9788-4c90-884e-3643419adbc3_Go-Biz_20220308_192817.jpeg?auto=format?auto=format&fit=crop&w=72&q=80" alt="Nasi Kulit"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Twister</span>
+        <span class="variant">Rp 3.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://superapp.id/blog/wp-content/uploads/2020/11/4-39.jpg?auto=format&fit=crop&w=72&q=80" alt="Nasi Kulit"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Scallop</span>
+        <span class="variant">Rp 3.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://paxelmarket.co/wp-content/uploads/2022/10/IMG-20221004-WA0091.jpg?auto=format&fit=crop&w=72&q=80" alt="Nasi Kulit"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Otak-Otak</span>
+        <span class="variant">Rp 3.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://img.okezone.com/content/2020/11/20/298/2312789/dumpling-ayam-ala-rumahan-cocok-untuk-sarapan-tkX6IHz4LE.jpg?auto=format&fit=crop&w=72&q=80" alt="Nasi Kulit"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Dumpling Ayam</span>
+        <span class="variant">Rp 4.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://gata.co.id/assets/images/produk/dumling-keju-matcha20230302173317.jpg?auto=format&fit=crop&w=72&q=80" alt="Nasi Kulit"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Dumpling Keju</span>
+        <span class="variant">Rp 4.000</span>
+      </div>
+      <button type="button">Tambah</button>
+  </ul>
+</section>
+
+<section id="section-sambal" style="display:none">
+  <ul class="menu-list">
+    <li class="menu-item">
+      <img src="https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/108/MTA-53377479/no_brand_nasi_daun_jeruk_kulit_ayam_crispy_full01_dbcf37c9.jpg?auto=format&fit=crop&w=72&q=80" alt="Nasi Kulit"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Nasi kulit</span>
+        <span class="variant">Rp 10.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+  <img src="https://superapp.id/blog/wp-content/uploads/2020/10/5-37.jpg?auto=format&fit=crop&w=72&q=80" alt="Mie Goreng"
+       onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+  <div class="info">
+    <span class="name">Mie Goreng</span>
+    <span class="variant">Rp 8.000</span>
+  </div>
+  <button type="button">Tambah</button>
+  <label style="display:block;margin-top:4px;font-size:13px;">
+    <input type="checkbox" class="add-telur-checkbox" style="margin-right:4px;">+Telur 4.000
+  </label>
+</li>
+<li class="menu-item">
+  <img src="https://1.bp.blogspot.com/-5IWxJKLX9Hw/Xx0uKoofexI/AAAAAAAAGQU/p3ztkQpsk6gdivlLySpi9wXVkc7AYXxLwCLcBGAsYHQ/s1600/20_Mami.jpg?rs=1&pid=ImgDetMain?auto=format&fit=crop&w=72&q=80" alt="Mie Rebus"
+       onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+  <div class="info">
+    <span class="name">Mie Rebus</span>
+    <span class="variant">Rp 8.000</span>
+  </div>
+  <button type="button">Tambah</button>
+  <label style="display:block;margin-top:4px;font-size:13px;">
+    <input type="checkbox" class="add-telur-checkbox" style="margin-right:4px;">+Telur 4.000
+  </label>
+</li>
+    <li class="menu-item">
+      <img src="https://img.inews.co.id/files/inews_new/2020/08/28/resep_nasi_bakar_cumi_sambalado.jpg?auto=format&fit=crop&w=72&q=80" alt="Sego Bakar"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Sego Bakar</span>
+        <span class="variant">Rp 8.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+  </ul>
+</section>
+
+<section id="section-minuman" style="display:none">
+  <ul class="menu-list">
+    <li class="menu-item">
+      <img src="https://static.jakmall.id/2022/04/images/products/d0ae19/detail/one-two-cups-filter-penyaring-kopi-v60-glass-wooden-bracket-se102.jpg?auto=format&fit=crop&w=72&q=80" alt="Kopi Filter"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Kopi filter</span>
+        <span class="variant">Rp 15.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://noir.web.id/wp-content/uploads/2022/04/kopi-susu-gula-aren.jpg?auto=format&fit=crop&w=72&q=80" alt="Kopi Susu WKS"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Kopi Susu WKS</span>
+        <span class="variant">Rp 12.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://asset-a.grid.id/crop/0x0:0x0/700x465/photo/2020/03/17/1162215485.jpg?auto=format&fit=crop&w=72&q=80" alt="Jahe Susu"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Jahe susu</span>
+        <span class="variant">Rp 8.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://images.genpi.co/resize/1280x860-100/uploads/riau/arsip/normal/2022/05/28/ilustrasi-kopi-hitam-foto-envato-elements-voxq.jpg?auto=format&fit=crop&w=72&q=80" alt="Kopi Hitam"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Kopi Hitam Anget</span>
+        <span class="variant">Rp 5.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://listedfit.com/wp-content/uploads/2017/03/boil-down-coke.jpg?auto=format&fit=crop&w=72&q=80" alt="Kopi Hitam"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Kopi Hitam Es</span>
+        <span class="variant">Rp 5.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://prestasibimbel.com/images/photos/Artikel/susu.jpg?auto=format&fit=crop&w=72&q=80" alt="Susu Saja"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Susu saja</span>
+        <span class="variant">Rp 7.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://mtssunankalijogo.sch.id/wp-content/uploads/2020/11/es.jpg?auto=format&fit=crop&w=72&q=80" alt="Tea Tok"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Tea tok</span>
+        <span class="variant">Rp 5.000</span>
+        <span class="variant">Manis/Tawar</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://i.pinimg.com/736x/b9/16/9f/b9169ffb65a3da0ceee2bbb61e169f03.jpg?auto=format&fit=crop&w=72&q=80" alt="Matcha Latte"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Matcha latte</span>
+        <span class="variant">Rp 15.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://i.pinimg.com/originals/02/ca/51/02ca51cecec5eb898177fceedd5d4518.jpg?auto=format&fit=crop&w=72&q=80" alt="Chocolate Milk"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Red Velvet</span>
+        <span class="variant">Rp 15.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://becomevegetarian.org/wp-content/uploads/2021/08/Depositphotos_101588404_xl-2015-scaled.jpg?auto=format&fit=crop&w=72&q=80" alt="Chocolate Milk"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Kopsu Banana</span>
+        <span class="variant">Rp 15.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+    <li class="menu-item">
+      <img src="https://www.orchidsandsweettea.com/wp-content/uploads/2022/04/Caramel-Iced-Latte-6-of-6.jpg?auto=format&fit=crop&w=72&q=80" alt="Chocolate Milk"
+           onerror="this.onerror=null;this.src='https://placehold.co/72x72?text=No+Image';" />
+      <div class="info">
+        <span class="name">Kopsu Caramel</span>
+        <span class="variant">Rp 15.000</span>
+      </div>
+      <button type="button">Tambah</button>
+    </li>
+  </ul>
+</section>
+<div id="order-summary" style="max-width:480px;margin:24px auto 0 auto;padding:16px 14px 10px 14px;background:#fff;border-radius:10px;box-shadow:0 2px 8px #0001;">
+  <h3 style="margin:0 0 10px 0;font-size:16px;font-weight:700;color:#e94e1b;">Pesanan Anda</h3>
+<!-- ...existing code... -->
+<div style="margin-bottom:10px;">
+    <label for="no-meja" style="font-weight:600;">No. Meja:</label>
+    <select id="no-meja" style="margin-left:8px;padding:4px 10px;border-radius:6px;border:1px solid #ddd;width:90px;">
+      <option value="">Pilih meja</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+</div>
+<!-- ...existing code... -->
+  <ul id="order-list" style="list-style:none;padding:0;margin:0 0 10px 0;"></ul>
+  <div id="order-total" style="font-weight:700;font-size:16px;color:#333;">Total: Rp 0</div>
+  <button id="print-pdf-btn" style="margin-top:12px;padding:8px 18px;border-radius:8px;border:none;background:#e94e1b;color:#fff;font-weight:600;cursor:pointer;">
+  Cetak Struk Pesanan
+</button>
+<button id="order-wa-btn" style="margin-top:8px;padding:8px 18px;border-radius:8px;border:none;background:#25d366;color:#fff;font-weight:600;cursor:pointer;">
+  Order via WhatsApp
+</button>
+</div>
+<script>
+document.getElementById('order-wa-btn').onclick = function() {
+  const noMeja = document.getElementById('no-meja').value.trim();
+  if (!noMeja) {
+    alert('Silakan isi nomor meja terlebih dahulu!');
+    document.getElementById('no-meja').focus();
+    return;
+  }
+  
+  if (!orders.length) {
+    alert('Pesanan masih kosong!');
+    return;
+  }
+  let pesan = '*WEKAES MENU - Pesanan Anda*\n\n';
+  pesan += `*No. Meja:* ${noMeja}\n\n`;
+  let total = 0;
+  orders.forEach((order, idx) => {
+    pesan += `${idx+1}. ${order.name} x${order.qty} - Rp ${order.price.toLocaleString('id-ID')}\n`;
+    total += order.price * order.qty;
+  });
+  pesan += `\n*Total: Rp ${total.toLocaleString('id-ID')}*`;
+  const waUrl = 'https://wa.me/6287720735824?text=' + encodeURIComponent(pesan);
+  window.open(waUrl, '_blank');
+};
+</script>
+<script>
+document.getElementById('print-pdf-btn').onclick = function() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const noMeja = document.getElementById('no-meja').value.trim();
+
+  doc.setFontSize(16);
+  doc.text("WEKAES MENU", 10, 15);
+  doc.setFontSize(12);
+  doc.text("Struk Pesanan", 10, 25);
+  doc.text(`No. Meja: ${noMeja || '-'}`, 10, 32);
+
+
+  let y = 40;
+  let total = 0;
+  orders.forEach((order, idx) => {
+    doc.text(`${idx+1}. ${order.name} x${order.qty} - Rp ${order.price.toLocaleString('id-ID')}`, 10, y);
+    y += 8;
+    total += order.price * order.qty;
+  });
+
+  doc.setFontSize(13);
+  doc.text(`Total: Rp ${total.toLocaleString('id-ID')}`, 10, y + 5);
+
+  doc.save("struk-pesanan.pdf");
+};
+</script>
+<script>
+
+// Data pesanan
+let orders = [];
+
+// Fungsi tambah pesanan
+document.querySelectorAll('.menu-item button').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const item = this.closest('.menu-item');
+    const nameBase = item.querySelector('.name').textContent;
+    const priceBase = parseInt(item.querySelector('.variant').textContent.replace(/[^\d]/g, ''), 10) || 0;
+    const telurCheckbox = item.querySelector('.add-telur-checkbox');
+    let name = nameBase;
+    let price = priceBase;
+    // Jika ada checkbox telur dan dicentang, tambahkan telur
+    if (telurCheckbox && telurCheckbox.checked) {
+      name += " + Telur";
+      price += 4000;
+      telurCheckbox.checked = false; // reset checkbox setelah klik
+    }
+    // Cek jika sudah ada, tambah qty
+    const found = orders.find(o => o.name === name && o.price === price);
+    if (found) {
+      found.qty += 1;
+    } else {
+      orders.push({ name, price, qty: 1 });
+    }
+    updateOrderList();
+  });
+});
+
+// Update tampilan pesanan & total
+function updateOrderList() {
+  const list = document.getElementById('order-list');
+  const totalDiv = document.getElementById('order-total');
+  list.innerHTML = '';
+  let total = 0;
+  orders.forEach((order, idx) => {
+    total += order.price * order.qty;
+    const li = document.createElement('li');
+    li.style.marginBottom = '6px';
+    li.innerHTML = `
+      <span>${order.name} x${order.qty} - Rp ${order.price.toLocaleString('id-ID')}</span>
+      <button onclick="cancelOrder(${idx})" style="margin-left:10px;background:#e94e1b;color:#fff;border:none;border-radius:5px;padding:2px 10px;cursor:pointer;">Cancel</button>
+    `;
+    list.appendChild(li);
+  });
+  totalDiv.textContent = 'Total: Rp ' + total.toLocaleString('id-ID');
+}
+
+// Fungsi cancel pesanan
+window.cancelOrder = function(idx) {
+  orders.splice(idx, 1);
+  updateOrderList();
+};
+</script>
+
+<script>
+  // Sidebar kategori dinamis
+  document.querySelectorAll('nav.categories a').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Set active class
+      document.querySelectorAll('nav.categories a').forEach(a => a.classList.remove('active'));
+      this.classList.add('active');
+      // Tampilkan section sesuai kategori
+      const section = this.getAttribute('data-section');
+      document.querySelectorAll('section[id^="section-"]').forEach(sec => sec.style.display = 'none');
+      document.getElementById('section-' + section).style.display = '';
+    });
+  });
+</script>
+<!-- ...existing code (checkout bar, dll)... -->
+<script>
+// Fitur tambah pesanan mie dengan/atau tanpa telur
+function addMieWithTelur(btn) {
+  const item = btn.closest('.menu-item');
+  const nameBase = item.querySelector('.name').textContent;
+  const priceBase = parseInt(item.querySelector('.variant').textContent.replace(/[^\d]/g, ''), 10) || 0;
+  const telurChecked = item.querySelector('.add-telur-checkbox').checked;
+  let name = nameBase;
+  let price = priceBase;
+  if (telurChecked) {
+    name += " + Telur";
+    price += 4000;
+  }
+  // Cek jika sudah ada, tambah qty
+  const found = orders.find(o => o.name === name && o.price === price);
+  if (found) {
+    found.qty += 1;
+  } else {
+    orders.push({ name, price, qty: 1 });
+  }
+  updateOrderList();
+}
+</script>
